@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:sws="http://www.springframework.org/schema/web-services"
+       xmlns:oxm="http://www.springframework.org/schema/oxm"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+       http://www.springframework.org/schema/web-services http://www.springframework.org/schema/web-services/web-services-2.0.xsd http://www.springframework.org/schema/oxm http://www.springframework.org/schema/oxm/spring-oxm.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+	<context:component-scan base-package="com"></context:component-scan>
+<sws:annotation-driven/> 
+   
+   <sws:dynamic-wsdl id="user" portTypeName="UserType" locationUri="/service/user">
+   		<sws:xsd location="/WEB-INF/user.xsd"/>
+   </sws:dynamic-wsdl>
+   <oxm:jaxb2-marshaller id="jaxbMarshallerBean">
+   		 <oxm:class-to-be-bound name="com.zchen.User" />
+   </oxm:jaxb2-marshaller>
+    
+<!--     <sws:dynamic-wsdl id="demo" portTypeName="UserResource" locationUri="/demo">
+        <sws:xsd location="/WEB-INF/demo.xsd" />
+    </sws:dynamic-wsdl> -->
+
+    
+	<sws:dynamic-wsdl id="say" portTypeName="Echo" locationUri="/say">
+        <sws:xsd location="/WEB-INF/say.xsd" />
+    </sws:dynamic-wsdl> 
+
+<!-- <bean id="xsd" class="org.springframework.xml.xsd.commons.CommonsXsdSchemaCollection"> 
+<property name="xsds"> 
+<list> 
+<value>/WEB-INF/say.xsd</value> 
+</list> 
+</property> 
+</bean> 
+<bean id="say" 
+class="org.springframework.ws.wsdl.wsdl11.DefaultWsdl11Definition"> 
+<property name="schemaCollection" ref="xsd" /> 
+<property name="portTypeName" value="Echo" /> 
+<property name="locationUri" value="/say" /> 
+</bean> -->
+    <bean id="messageFactory" class="org.springframework.ws.soap.saaj.SaajSoapMessageFactory"/>
+<bean id="webServiceTemplate" class="org.springframework.ws.client.core.WebServiceTemplate">
+    <constructor-arg ref="messageFactory"/>
+            <property name="defaultUri" value="http://localhost:8280/spring-ws/service/user"/>
+        </bean>
+        
+<!--   <bean id="xxxWebService" class="org.springframework.ws.client.core.WebServiceTemplate">
+            <property name="defaultUri" value="http://XXX.net:8080"/>
+        </bean> -->     
+      
+</beans>
